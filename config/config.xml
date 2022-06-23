@@ -1,0 +1,11 @@
+<configuration>
+  <diashow>
+    <interval>1</interval>
+    <random>True</random>
+    <onBattery>True</onBattery>
+  </diashow>
+  <images>
+    <interval>60</interval>
+    <count>20</count>
+  </images>
+</configuration>
