@@ -1,15 +1,19 @@
 using module modules\WConfig.psm1
+using module modules\WSetup.psm1
 
-$conf = [WConfig]::new()
-$conf.init($PSScriptRoot)
+$localPath = $env:APPDATA + "\caas-wallpaper"
+
+[WSetup]::checkLocalFolderStructure($localPath, $PSScriptRoot)
+
+$conf = [WConfig]::new($localPath)
 
 function createTask()
 {
     #TODO - execute background task that gets the Images
     $taskAction = New-ScheduledTaskAction `
 -Execute "powershell.exe" `
--Argument '-Windowstyle Hidden -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -File modules\WConfig.psm1'`
--WorkingDirectory ~\.caas-wallpaper\
+-Argument $PSScriptRoot'\getImages.ps1 -Windowstyle Hidden -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -File modules\WConfig.psm1'`
+-WorkingDirectory $PSScriptRoot
 
     $taskTrigger = New-ScheduledTaskTrigger `
  -Once `
@@ -19,7 +23,7 @@ function createTask()
 
  if (Get-ScheduledTask -TaskName 'caas-wallpaper' -ErrorAction SilentlyContinue)
     {
-        $task = Get-ScheduledTask -TaskName 'caas-wallpaper' -ErrorAction SilentlyCoKntinue
+        $task = Get-ScheduledTask -TaskName 'caas-wallpaper' -ErrorAction SilentlyContinue
         $taskTriggers += $taskTrigger
         $task.Triggers = $taskTriggers
         $task | Set-ScheduledTask

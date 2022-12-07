@@ -1,4 +1,9 @@
 <configuration>
+  <general>
+    <localPath></localPath>
+    <scriptPath></scriptPath>
+    <logPath></logPath>
+  </general>
   <diashow>
     <interval>1</interval>
     <random>True</random>
